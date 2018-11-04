@@ -1,6 +1,8 @@
+
+
 import React from 'react';
-import { StyleSheet, Text, View, AsyncStorage, TouchableOpacity } from 'react-native';
-import { SearchBar, Header, Card } from 'react-native-elements';
+import { StyleSheet, Text, View, AsyncStorage, ScrollView} from 'react-native';
+import { SearchBar, Header , List, ListItem} from 'react-native-elements';
 
 export default class App extends React.Component {
     constructor(){
@@ -20,21 +22,42 @@ export default class App extends React.Component {
                 <View style={styles.testHeader}>
 
                     <Header
-                        centerComponent={{text: 'What up Bish', style: {color: '#fff'}}}
+                        centerComponent={{text: 'Take your Notes', style: {color: '#fff'}}}
                     />
                 </View>
+               <View style = {styles.DemLists}>
+                   <ScrollView>
+                <List ref={arr => this.arr= arr}>
+                    {
+                        this.arr.map((arr) => (
+                            <ListItem
+                                key={arr.title}
+                                title={arr.title}
 
-               <View style={styles.searchbar}>
+                            />
+                        ))
+                    }
+                </List>
+                   </ScrollView>
+            </View>
+                <View style={styles.searchbar}>
                     <SearchBar
                         ref={search => this.search = search}
                         onChangeText={this.handleChangeText }
                         onSubmitEditing={baz =>   {
                             this.search.clearText();
-                            // this.saveData(this.state.text);
-                            this.arr.push(this.state.text);
 
-                            // this.displayData();
-                          alert(this.arr)
+                            var b = {title:this.state.text};
+                            this.arr.push(b);
+                              this.saveData(this.state.text);
+                              // test out the data AsyncStorage
+
+                              this.displayData(this.state.text); // this will be key for the value that is in asynStorgae
+
+
+                            //
+                            // fo oduct there is no need to alert , the array of objects
+                            // alert(this.arr)
 
                         }}
                         placeholder='Type Here...'/>
@@ -46,20 +69,30 @@ export default class App extends React.Component {
     }
 
     saveData(word) {
-  
+
+
         let obj= word;
-        AsyncStorage.setItem('user', obj);
+        AsyncStorage.setItem(word, obj);
     }
-    displayData = async () => {
+    displayData = async (note) => {
+      // the key will be the note
         try {
-        let user = await AsyncStorage.getItem('user');
-        alert(user);
+            let user = await AsyncStorage.getItem(note);
+            alert(user);
         }
         catch(error){
-           alert(error);
+            alert(error);
         }
     }
 }
+
+// getAllElements = () =>{
+//   this.arr.forEach(function(element)){
+//     if ( element != null){
+//       this.displayData(element);
+//     }
+//   }
+// }
 
 const styles = StyleSheet.create({
     container: {
@@ -95,7 +128,13 @@ const styles = StyleSheet.create({
         alignSelf:'stretch',
 
 
+
     },
+    DemLists: {
+        flex: 14,
+        alignSelf: 'stretch',
+
+    }
 
 
 
