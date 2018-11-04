@@ -1,12 +1,15 @@
 
+
+
 import React from 'react';
-import { StyleSheet, Text, View, AsyncStorage, TouchableOpacity } from 'react-native';
-import { SearchBar, Header, Card } from 'react-native-elements';
+import { StyleSheet, Text, View, AsyncStorage, ScrollView} from 'react-native';
+import { SearchBar, Header , List, ListItem} from 'react-native-elements';
 
 export default class App extends React.Component {
     constructor(){
         super();
         this.state = {text:""}
+        this.arr = []
     }
 
     handleChangeText = (typedText) =>{
@@ -23,15 +26,34 @@ export default class App extends React.Component {
                         centerComponent={{text: 'What up Bish', style: {color: '#fff'}}}
                     />
                 </View>
+               <View style = {styles.DemLists}>
+                   <ScrollView>
+                <List ref={arr => this.arr= arr}>
+                    {
+                        this.arr.map((arr) => (
+                            <ListItem
+                                key={arr.title}
+                                title={arr.title}
 
-               <View style={styles.searchbar}>
+                            />
+                        ))
+                    }
+                </List>
+                   </ScrollView>
+            </View>
+                <View style={styles.searchbar}>
                     <SearchBar
                         ref={search => this.search = search}
                         onChangeText={this.handleChangeText }
                         onSubmitEditing={baz =>   {
                             this.search.clearText();
-                            this.saveData(this.state.text);
-                            this.displayData();
+                            // this.saveData(this.state.text);
+                            var b = {title:this.state.text};
+                            this.arr.push(b);
+
+                            // this.displayData();
+                            alert(this.arr)
+
                         }}
                         placeholder='Type Here...'/>
                 </View>
@@ -40,18 +62,19 @@ export default class App extends React.Component {
 
         );
     }
-    
+
     saveData(word) {
+
         let obj= word;
         AsyncStorage.setItem('user', obj);
     }
     displayData = async () => {
         try {
-        let user = await AsyncStorage.getItem('user');
-        alert(user);
+            let user = await AsyncStorage.getItem('user');
+            alert(user);
         }
         catch(error){
-           alert(error);
+            alert(error);
         }
     }
 }
@@ -91,6 +114,10 @@ const styles = StyleSheet.create({
 
 
     },
+    DemLists: {
+        flex: 14,
+        alignSelf: 'stretch',
+    }
 
 
 
