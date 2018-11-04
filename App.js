@@ -23,7 +23,7 @@ export default class App extends React.Component {
                 <View style={styles.testHeader}>
 
                     <Header
-                        centerComponent={{text: 'What up Bish', style: {color: '#fff'}}}
+                        centerComponent={{text: 'Notes By Ronak', style: {color: '#fff'}}}
                     />
                 </View>
                <View style = {styles.DemLists}>
@@ -47,12 +47,12 @@ export default class App extends React.Component {
                         onChangeText={this.handleChangeText }
                         onSubmitEditing={baz =>   {
                             this.search.clearText();
-                            // this.saveData(this.state.text);
                             var b = {title:this.state.text};
-                            this.arr.push(b);
-
+                            this.saveData(this.state.text,b);
+                            //this.arr.push(b);
+                            this.setArr();
                             // this.displayData();
-                            alert(this.arr)
+
 
                         }}
                         placeholder='Type Here...'/>
@@ -62,11 +62,21 @@ export default class App extends React.Component {
 
         );
     }
+    setArr(){
+        AsyncStorage.getAllKeys()
+            .then((ks) => {
+                ks.forEach((k) => {
+                    AsyncStorage.getItem(k)
+                        .then((v) => this.arr.push({title:v}));
+                });
+            });
 
-    saveData(word) {
+}
 
-        let obj= word;
-        AsyncStorage.setItem('user', obj);
+    saveData(a,b) {
+
+        let obj= b;
+        AsyncStorage.setItem(a , obj);
     }
     displayData = async () => {
         try {
