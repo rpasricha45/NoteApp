@@ -13,7 +13,8 @@ export default class App extends React.Component {
                />
 
 
-            
+
+
 
             </View>
             <View style = {styles.searchbar}>
@@ -21,6 +22,10 @@ export default class App extends React.Component {
         placeholder='Type Here...'/>
             </View>
        </View>
+
+
+
+
     );
   }
 }
@@ -35,8 +40,18 @@ const styles = StyleSheet.create({
   },
    searchbar: {
      // bottom:-100,
-     alignSelf:'stretch',
+
+
+     position:'absolute',
+     left:0,
+     right:0,
+     bottom:0,
+
+
      alignItems:'stretch',
+
+      alignSelf:'stretch',
+
 
      flex:1,
 
