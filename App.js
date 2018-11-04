@@ -1,49 +1,61 @@
 
 import React from 'react';
-import { StyleSheet, Text, View, AsyncStorage } from 'react-native';
+import { StyleSheet, Text, View, AsyncStorage, TouchableOpacity } from 'react-native';
 import { SearchBar, Header, Card } from 'react-native-elements';
 
 export default class App extends React.Component {
-    state = {
-        text: ''
-    };
-    _storeData = async () => {
-        try{
-            await AsyncStorage.setItem('@MySuperStore:key', 'I like to save it');
+    constructor(){
+        super();
+        this.state = {text:""}
+    }
 
-        }catch(error){
+    handleChangeText = (typedText) =>{
+        this.setState({text:typedText})
+    }
 
-        }
-    };
+
     render() {
         return (
-            <View style = {styles.container}>
-                <View style = {styles.testHeader}>
+            <View style={styles.container}>
+                <View style={styles.testHeader}>
 
                     <Header
-                        centerComponent={{text: 'What up Bish', style:{color: '#fff'}}}
+                        centerComponent={{text: 'What up Bish', style: {color: '#fff'}}}
                     />
-
-
-
-
-
                 </View>
-                <View style = {styles.searchbar}>
+
+               <View style={styles.searchbar}>
                     <SearchBar
                         ref={search => this.search = search}
-                        onChangeText={text => this.setState({text})}
-                        onSubmitEditing={random =>this.search.clearText()}
+                        onChangeText={this.handleChangeText }
+                        onSubmitEditing={baz =>   {
+                            this.search.clearText();
+                            this.saveData(this.state.text);
+                            this.displayData();
+                        }}
                         placeholder='Type Here...'/>
                 </View>
             </View>
 
 
-
-
         );
     }
+    
+    saveData(word) {
+        let obj= word;
+        AsyncStorage.setItem('user', obj);
+    }
+    displayData = async () => {
+        try {
+        let user = await AsyncStorage.getItem('user');
+        alert(user);
+        }
+        catch(error){
+           alert(error);
+        }
+    }
 }
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -78,7 +90,7 @@ const styles = StyleSheet.create({
         alignSelf:'stretch',
 
 
-    }
+    },
 
 
 
