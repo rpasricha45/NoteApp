@@ -3,6 +3,12 @@ import { StyleSheet, Text, View } from 'react-native';
 import { SearchBar, Header, Card } from 'react-native-elements';
 
 export default class App extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = { text: '' };
+  }
+
   render() {
     return (
         <View style = {styles.container}>
@@ -13,13 +19,20 @@ export default class App extends React.Component {
                />
 
 
-
-
-
             </View>
+
+
+
+
             <View style = {styles.searchbar}>
         <SearchBar
-        placeholder='Type Here...'/>
+        placeholder='Type Here...'
+        onChangeText={(text) => this.setState({text})}
+        value = {this.state.text}
+
+
+        />
+
             </View>
        </View>
 
